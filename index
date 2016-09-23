@@ -1,0 +1,78 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="listbox11.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.3.min.js"></script>
+<script  src="script.js"></script>
+<meta charset="utf-8">
+
+
+</head>
+<body ng-app="seeditorApp" ng-controller="seeditorController">
+<div class="holder">
+	<div class="topbar blue">
+		<h1>Wykładowca</h1>
+	</div>
+	<div>
+	<input name="wykladowca1" type="text" name="imie" size ="36"> 
+	<input id="button3" type="button" value="Dodaj" />
+	<input id="button1" type="button" value="Usun" />
+
+	</div>
+	<div class="inbar">
+	
+		<ul>
+			
+			<div style="height:500px;width:400px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+			<div ng-repeat= "entry in teachers" id="select_list1">
+			<li value="{{entry.id}}"><p>{{entry.user.firstName}} {{entry.user.lastName}} </p> </li>
+			</div>
+		</ul>
+		<div style="clear:both"></div>
+	</div>
+</div>	
+<div class="holder">
+	<div class="topbar orange">
+		<h1>Przedmiot</h1>
+	</div>
+	<div>
+	<input type="text" name="imie" size ="36"> 
+	<input id="button4" type="button" value="Dodaj" />
+	<input id="button2" type="button" value="Usun" />	
+	</div>
+	<div class="inbar">
+		<ul>
+		<div style="height:500px;width:400px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+			<div ng-repeat= "entry in subjects" id="select_list2">
+			<li value="{{entry.id}}"><p>{{entry.name}} </p> </li>
+			</div>
+		</div>
+		</ul>
+		<div style="clear:both"></div>
+	</div>
+</div>
+	<div class="holder">
+	<form method="post" action="kontakt.php">
+		<div class="topbar green">
+				<h1>Przedmiot</h1>
+	</div>
+
+	<div class="inbar">
+		<ul>
+			<li><p> <label>Wykładowca</label>
+				<input name="name" ></p></li>
+			<li><p><label>Przedmiot</label>
+				<input name="subject" ></p></li>
+			<li><p><input id="submit" action="kontakt.php" name="submit" type="submit" value="Wyślij"></p></li>
+		
+		</ul>
+		<div style="clear:both"></div>
+	</div>
+	</form>
+</div>
+</body>
+</html>
+
+	
+
