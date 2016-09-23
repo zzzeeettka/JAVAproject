@@ -1,0 +1,112 @@
+//deklaracja apki angularowej
+var app = angular.module("seeditorApp", []);
+
+//obsługa CORS (nie mam zielonego pojęcia, czy to faktycznie działa z poziomu kodu angulara)
+app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    }
+]);
+
+//loginy (tymczasowe)
+var login='admin';
+var pass='admin';
+
+//kontroler
+app.controller('seeditorController', ['$scope','$http', function($scope,$http) {
+
+  
+	AuthorizeAsync($http,function(token){	//wszystkie operacje wymagające dobicia się do backendu (wywalić w razie pobierania tokenu zkądś indziej)
+  
+		getAllSubjectEntrys ($http, token, function(data){
+			$scope.subjectEntrys= data;
+		});
+		getAllSubjects ($http, token, function(data){
+			$scope.subjects= data;
+		});
+		getAllTeachers ($http, token, function(data){
+			$scope.teachers= data;
+		});
+  
+	});
+ 
+}]);
+ 
+
+
+//sortowanie JSONa rosnąco według danego klucza
+function sortJSON(data, key) {
+    return data.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+//zmiana formatu wpisu o typ przedmiotu
+function changeSubjectType(type){
+	switch(type){
+		case 'LECTURE': return 'W';
+		case 'LAB': return 'L';
+		case 'PRACTICE': return 'C';
+	}
+}
+//request autoryzacji
+function AuthorizeAsync($http,callback){
+	 var authenticate_request = {
+	 method: 'POST',
+	 url: 'https://wsg-mis.herokuapp.com/api/authenticate',
+	 headers: {
+	   'Host': 'wsg-mis.herokuapp.com',
+	   'Cache-Control': 'no-cache',
+	   'Postman-Token': 'e03e7957-6526-1d9e-cf55-790e5568f93e',
+	   'Content-Type': 'application/x-www-form-urlencoded',
+	 },
+	 data: 'username='+login+'&password='+pass
+	}
+	$http(authenticate_request)
+	.success(function(data, status) {
+		if(callback) callback(data.token);
+	});
+}
+//request pobrania wszystkich przedmiotów (getAllSubjectEntrys)
+function getAllSubjectEntrys($http, token, callback){
+	var request = {
+		method:'GET',
+		url: 'https://wsg-mis.herokuapp.com/api/subjectEntrys',
+		headers:{
+			'Access-Control-Allow-Origin': '*',
+			'Accept': 'application/json',
+			'X-Auth-Token':token,
+			
+		}
+	}
+	$http(request).success(function(data,status) {if(callback) callback(data);});
+}
+
+function getAllSubjects($http, token, callback){
+	var request = {
+		method:'GET',
+		url: 'https://wsg-mis.herokuapp.com/api/subjects',
+		headers:{
+			'Access-Control-Allow-Origin': '*',
+			'Accept': 'application/json',
+			'X-Auth-Token':token,
+			
+		}
+	}
+	$http(request).success(function(data,status) {if(callback) callback(data);});
+}
+
+function getAllTeachers($http, token, callback){
+	var request = {
+		method:'GET',
+		url: 'https://wsg-mis.herokuapp.com/api/teachers',
+		headers:{
+			'Access-Control-Allow-Origin': '*',
+			'Accept': 'application/json',
+			'X-Auth-Token':token,
+			
+		}
+	}
+	$http(request).success(function(data,status) {if(callback) callback(data);});
+}
+
